@@ -43,7 +43,7 @@ function Home({ text, footerText }) {
             cardType="small-business-card"
             iconUrl="/assets/img/small_business.png"
             linkTo="/apply-for-small-business-loan"
-            title={text.smallBusiness}
+            title="嵌入式签名"
             featureList={text.smallBusinessFeatures}
             buttonType="small-business-btn"
           />

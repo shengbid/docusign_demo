@@ -42,7 +42,7 @@ function App() {
   // populate the app.
   async function getTextContent() {
     try {
-      let response = await axios.get('/assets/text.json');
+      let response = await axios.get('http://localhost:8085/assets/text.json');
 
       // Only set states if the component is mounted, otherwise return null.
       if (!mountedRef.current) return null;

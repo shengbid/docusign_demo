@@ -3,8 +3,8 @@ import parse from 'html-react-parser';
 import { Link } from 'react-router-dom';
 
 function Card({ cardType, buttonType, iconUrl, title, featureList, linkTo }) {
-  const buttonName = 'Get Started';
-  const featureListTitle = 'DocuSign features:';
+  const buttonName = '开始';
+  const featureListTitle = '功能点:';
 
   return (
     <div className={cardType}>
