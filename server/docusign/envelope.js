@@ -22,8 +22,28 @@ const sendEnvelope = async (envelopeDefinition, args) => {
   });
 
   let envelopeId = results.envelopeId;
-  console.log(`Envelope was created. EnvelopeId ${envelopeId}`);
 
+  // let prefillTabs = eSignSdk.PrefillTabs.constructFromObject({
+  //   'textTabs':[{ 
+  //     recipientId: '1',
+  //     documentId: '1',
+  //     pageNumber: '1',
+  //     xPosition: '145',
+  //     yPosition: '292',
+  //     required: 'true',
+  //     tabLabel: '合同金额',
+  //     height: '20',
+  //     width: '220',
+  //     bold: true,
+  //     // value: args.envelopeArgs.contractAmount,
+  //     value: 60000,
+  //   }]});
+
+  // let tabs = new eSignSdk.Tabs();
+  // tabs.prefillTabs = prefillTabs;
+  // envelopesApi.createDocumentTabs(args.accountId, envelopeId, '1', tabs);
+
+  console.log(`Envelope was created. EnvelopeId ${envelopeId}`);
   return envelopeId;
 };
 
@@ -59,7 +79,7 @@ const getRecipientViewUrl = async (envelopeId, args) => {
       recipientViewRequest: viewRequest,
     }
   );
-
+  console.log(recipientView.url)
   return recipientView.url;
 };
 

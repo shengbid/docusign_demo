@@ -142,7 +142,7 @@ function makeLoanApplicationEnvelope(args) {
     yPosition: '263',
     required: 'false',
     tabLabel: '国家',
-    height: '20',
+    height: '23',
     width: '220',
   });
 
@@ -150,12 +150,12 @@ function makeLoanApplicationEnvelope(args) {
     recipientId: '1',
     documentId: '1',
     pageNumber: '1',
-    xPosition: '145',
+    xPosition: '405',
     yPosition: '292',
-    required: 'false',
+    required: 'true',
     tabLabel: '城市',
-    height: '20',
-    width: '220',
+    height: '23',
+    width: '180',
   });
 
   /////////////// Create radio tabs ///////////////
@@ -196,7 +196,7 @@ function makeLoanApplicationEnvelope(args) {
 
   /////////////// Create recipients of the envelope ///////////////
   // Create signer recipients to sign the document with the tabs
-  let signer1 = eSignSdk.Signer.constructFromObject({
+  let signer = eSignSdk.Signer.constructFromObject({
     email: args.signerEmail,
     name: args.signerName,
     roleName: 'partyA',
@@ -228,24 +228,24 @@ function makeLoanApplicationEnvelope(args) {
       // zipTabs: [zip],
     }),
   });
-  let signer2 = eSignSdk.Signer.constructFromObject({
-    email: args.signerEmail,
-    name: args.signerName,
-    clientUserId: args.signerClientId,
-    recipientId: '2',
-    routingOrder: '2',
-    roleName: 'partyB',
-    tabs: eSignSdk.Tabs.constructFromObject({
-      dateSignedTabs: [dateSigned2],
-      // initialHereTabs: [initialHere],
-      signHereTabs: [signHere2],
-    }),
-  });
+  // let signer2 = eSignSdk.Signer.constructFromObject({
+  //   email: args.signerEmail,
+  //   name: args.signerName,
+  //   clientUserId: args.signerClientId,
+  //   recipientId: '2',
+  //   routingOrder: '2',
+  //   roleName: 'partyB',
+  //   tabs: eSignSdk.Tabs.constructFromObject({
+  //     dateSignedTabs: [dateSigned2],
+  //     // initialHereTabs: [initialHere],
+  //     signHereTabs: [signHere2],
+  //   }),
+  // });
 
-  let signer = signer1
-  if (args.roleName === 'partyB') {
-    signer = signer2
-  }
+  // let signer = signer1
+  // if (args.roleName === 'partyB') {
+  //   signer = signer2
+  // }
 
   // Create recipient object
   let recipients = eSignSdk.Recipients.constructFromObject({

@@ -18,6 +18,7 @@ function SmallBusinessLoan({ text, formText, btsText, userFlowText }) {
     const body = {
       signerName: event.lastName + ' ' + event.firstName,
       signerEmail: event.signerEmail,
+      contractAmount: event.contractAmount,
     };
 
     // Send request to server
@@ -25,6 +26,7 @@ function SmallBusinessLoan({ text, formText, btsText, userFlowText }) {
       const response = await sendRequest('/loanApplication', body);
       // Received URL for embedded signing, redirect user
       if (response.status === 200) {
+        console.log(response.data)
         window.location = response.data;
       }
     } catch (error) {

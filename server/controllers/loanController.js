@@ -13,7 +13,6 @@ const {
 const {
   hasConditionalRoutingEnabled,
   hasDocumentVisibilityEnabled,
-  getIdvWorkflowId
 } = require('../docusign/workflow');
 const errorText = require('../assets/errorText.json').api;
 const AppError = require('../utils/appError');
@@ -22,10 +21,10 @@ const AppError = require('../utils/appError');
 const signerClientId = '1000'; // The id of the signer within this application.
 const docsPath = path.resolve(__dirname, '../docusign/pdf');
 const docFile = 'sign1.pdf';
-// const dsReturnUrl =
-//   process.env.REDIRECT_URI + '/apply-for-small-business-loan/submitted-loan';
 const dsReturnUrl =
-  process.env.REDIRECT_URI + '/complete';
+  process.env.REDIRECT_URI + '/apply-for-small-business-loan/submitted-loan';
+// const dsReturnUrl =
+//   process.env.REDIRECT_URI + '/complete';
 const dsPingUrl = process.env.REDIRECT_URI + '/index';
 const smallLenderName = text.names.smallLenderName;
 const bigLenderName = text.names.bigLenderName;
@@ -54,7 +53,7 @@ const createController = async (req, res, next) => {
   const envelopeArgs = {
     signerEmail: body.signerEmail,
     signerName: body.signerName,
-    roleName: body.roleName,
+    contractAmount: body.contractAmount,
     status: 'sent',
     docFile: path.resolve(docsPath, docFile),
 
@@ -113,7 +112,7 @@ const createController = async (req, res, next) => {
     // Step 4 start
     // Get recipient view URL for embedded signing
     const viewUrl = await getRecipientViewUrl(envelopeId, args);
-
+    // const viewUrl = 'https://blog.csdn.net/ababab12345/article/details/124104779'
     // Set results
     results = { envelopeId: envelopeId, redirectUrl: viewUrl };
   } catch (error) {
@@ -127,7 +126,7 @@ const createController = async (req, res, next) => {
     req.session.loanAppSignerName = body.signerName;
 
     // Send back redirect URL for embedded signing
-    res.status(200).send({status: 200, data: results.redirectUrl});
+    res.status(200).send(results.redirectUrl);
     // Step 4 end
   }
 };
