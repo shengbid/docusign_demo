@@ -34,18 +34,18 @@
     "learnMoreLink": "https://developers.docusign.com/"
   },
   "home": {
-    "title": "Welcome to MyGovernment",
-    "smallBusiness": "Small Business Loan",
-    "trafficTicket": "Traffic Ticket",
-    "passportApplication": "Passport Application",
-    "smallBusinessFeatures": "<li>Branding</li><li>Conditional recipients</li><li>Document visibility</li><li>Embedded signing</li>",
-    "passportFeatures": "<li>IDV</li><li>Payment</li><li>Remote signing</li><li>Signer attachment tab</li>",
-    "trafficTicketFeatures": "<li>Certified Delivery recipients</li><li>Conditional recipients</li><li>Embedded signing</li><li>Payment</li>"
+    "title": "Docusign 嵌入式签名应用例子",
+    "smallBusiness": "自定义信封",
+    "trafficTicket": "模板信封与短信验证",
+    "passportApplication": "模板选择与已签约列表",
+    "smallBusinessFeatures": "<li>预填写字段</li><li>嵌入式签名</li><li>自定义信封</li><li>可配置签名者</li>",
+    "passportFeatures": "<li>短信验证</li><li>可配置短信号码</li><li>可配置签名者</li><li>docusign模板生成信封</li>",
+    "trafficTicketFeatures": "<li>可选择模板</li><li>签名者信息</li><li>已签约文件列表</li><li>文件列表查看</li>"
   },
   "login": {
     "title": "Welcome to the MyGovernment Sample Application",
     "description": "This app was designed to showcase a potential integration of DocuSign eSignature with a government agency. This application is open source and all of the code is located in our GitHub repository.",
-    "loginButton": "Try the App",
+    "loginButton": "开始试用",
     "moreInfoButton": "More Info",
     "logoutButton": "Logout"
   },
@@ -63,7 +63,7 @@
     }
   },
   "smallBusinessLoan": {
-    "title": "Apply for a small business loan",
+    "title": "发起一个嵌入式签名",
     "names": {
       "userRoleName": "Business Owner",
       "smallLenderName": "Sage Small Lender",
