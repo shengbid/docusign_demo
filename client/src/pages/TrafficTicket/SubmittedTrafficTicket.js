@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { handleError } from '../../api/apiHelper';
-import axios from 'axios';
+import axios from '../../api/request';
 import Success from '../Success';
 import { useNavigate } from 'react-router-dom';
 

@@ -17,7 +17,7 @@ import TrafficTicket from './pages/TrafficTicket/TrafficTicket';
 import UseCaseIndex from './pages/UseCaseIndex';
 import SubmittedTrafficTicket from './pages/TrafficTicket/SubmittedTrafficTicket';
 import PageNotFound from './pages/PageNotFound';
-import axios from 'axios';
+import axios from './api/request';
 import RequireAuth from './components/RequireAuth';
 import './assets/scss/main.scss';
 import Header from './components/Header';

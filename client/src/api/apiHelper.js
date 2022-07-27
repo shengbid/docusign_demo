@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from './request';
 
 // Sends POST request using the given request and urlPath.
 export async function sendRequest(urlPath, request) {

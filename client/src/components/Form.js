@@ -64,6 +64,24 @@ function Form({
           ) : (
             <>
               <div className="form-text-container">
+                <label>预填写合同金额:</label>
+                <ErrorMessage
+                  errors={errors}
+                  name="contractAmount"
+                  as={<ErrorMessageContainer />}
+                />
+              </div>
+              <input
+                type="text"
+                {...register('contractAmount', {
+                  required: {
+                    value: true,
+                    message: text.requiredFieldError,
+                  },
+                })}
+              />
+              
+              <div className="form-text-container">
                 <label>{text.firstName}</label>
                 <ErrorMessage
                   errors={errors}
