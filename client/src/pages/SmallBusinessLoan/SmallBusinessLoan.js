@@ -16,7 +16,7 @@ function SmallBusinessLoan({ text, formText, btsText, userFlowText }) {
 
     // Make request body
     const body = {
-      signerName: event.firstName + ' ' + event.lastName,
+      signerName: event.lastName + ' ' + event.firstName,
       signerEmail: event.signerEmail,
     };
 
