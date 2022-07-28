@@ -5,11 +5,12 @@
   "formLabels": {
     "firstName": "名:",
     "lastName": "姓:",
+    "signerName": "姓名:",
     "officerNameLabel": "Officer name:",
     "email": "Email:",
-    "countryCode": "区域:",
+    "countryCode": "区号:",
     "phoneNumber": "电话:",
-    "phonePlaceholder": "4155551212",
+    "phonePlaceholder": "13512341234",
     "requiredFieldError": "This field is required.",
     "inputTooLongError": "Your input is too long.",
     "invalidEmailFormatError": "邮箱格式错误.",
@@ -85,7 +86,7 @@
     "backLink": "Back to Home"
   },
   "trafficTicket": {
-    "title": "You received a traffic ticket",
+    "title": "复合模板",
     "names": {
       "userRoleName": "Traffic Violator",
       "mitigationClerkName": "Millie Mitigation",
