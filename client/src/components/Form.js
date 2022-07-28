@@ -16,6 +16,7 @@ function Form({
   placeholderName,
   nameLabel,
   submitted = false,
+  isPrefiled,
 }) {
   let navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
@@ -63,7 +64,7 @@ function Form({
             </>
           ) : (
             <>
-              <div className="form-text-container">
+              {isPrefiled ? (<><div className="form-text-container">
                 <label>预填写合同金额:</label>
                 <ErrorMessage
                   errors={errors}
@@ -79,19 +80,19 @@ function Form({
                     message: text.requiredFieldError,
                   },
                 })}
-              />
-              
+              /></>) : null}
+
               <div className="form-text-container">
-                <label>{text.firstName}</label>
+                <label>{text.signerName}</label>
                 <ErrorMessage
                   errors={errors}
-                  name="firstName"
+                  name="signerName"
                   as={<ErrorMessageContainer />}
                 />
               </div>
               <input
                 type="text"
-                {...register('firstName', {
+                {...register('signerName', {
                   required: {
                     value: true,
                     message: text.requiredFieldError,
@@ -100,7 +101,7 @@ function Form({
                 })}
               />
 
-              <div className="form-text-container">
+              {/* <div className="form-text-container">
                 <label>{text.lastName}</label>
                 <ErrorMessage
                   errors={errors}
@@ -117,9 +118,35 @@ function Form({
                   },
                   maxLength: { value: 50, message: text.inputTooLongError },
                 })}
-              />
+              /> */}
             </>
           )}
+
+          <>
+            <div className="form-text-container">
+              <label>{text.email}</label>
+              <ErrorMessage
+                errors={errors}
+                name="signerEmail"
+                as={<ErrorMessageContainer />}
+              />
+            </div>
+            <input
+              type="text"
+              {...register('signerEmail', {
+                required: {
+                  value: true,
+                  message: text.requiredFieldError,
+                },
+                // Use regex string to validate email
+                pattern: {
+                  value:
+                    /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+                  message: text.invalidEmailFormatError,
+                },
+              })}
+            />
+          </>
 
           {/* If includePhone is true, then display the phone field only. Otherwise, display the
          email field. */}
@@ -135,7 +162,7 @@ function Form({
               </div>
               <input
                 type="text"
-                placeholder="1"
+                placeholder="+86"
                 {...register('countryCode', {
                   required: {
                     value: true,
@@ -180,33 +207,7 @@ function Form({
                 })}
               />
             </>
-          ) : (
-            <>
-              <div className="form-text-container">
-                <label>{text.email}</label>
-                <ErrorMessage
-                  errors={errors}
-                  name="signerEmail"
-                  as={<ErrorMessageContainer />}
-                />
-              </div>
-              <input
-                type="text"
-                {...register('signerEmail', {
-                  required: {
-                    value: true,
-                    message: text.requiredFieldError,
-                  },
-                  // Use regex string to validate email
-                  pattern: {
-                    value:
-                      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-                    message: text.invalidEmailFormatError,
-                  },
-                })}
-              />
-            </>
-          )}
+          ) : null}
 
           <div className="button-container">
             <button className="black-button" type="submit" disabled={submitted}>

@@ -16,8 +16,10 @@ function TrafficTicket({ text, formText, btsText, userFlowText }) {
 
     // Make request body
     const body = {
-      signerName: event.firstName + ' ' + event.lastName,
+      signerName: event.signerName,
       signerEmail: event.signerEmail,
+      countryCode: event.countryCode,
+      phoneNumber: event.phoneNumber,
     };
 
     // Send request to server
@@ -48,6 +50,7 @@ function TrafficTicket({ text, formText, btsText, userFlowText }) {
           userFlowText={userFlowText}
           onSubmit={handleSubmit}
           submitted={requesting}
+          includePhone
         />
         <BehindTheScenes
           title={btsText.title}

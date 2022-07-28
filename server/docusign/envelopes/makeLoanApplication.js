@@ -233,7 +233,7 @@ function makeLoanApplicationEnvelope(args) {
   });
   let signer2 = eSignSdk.Signer.constructFromObject({
     email: '441974767@qq.com',
-    name: 's smile',
+    name: 'smile',
     clientUserId: '1000',
     recipientId: '2',
     routingOrder: '2',
