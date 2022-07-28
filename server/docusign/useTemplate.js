@@ -102,7 +102,7 @@ async function makeEnvelope(args) {
       docusign.InlineTemplate.constructFromObject({
         sequence: "2",
         recipients: {
-          signers: [args.signers[0]]
+          signers: signers,
         },
       }),
     ],

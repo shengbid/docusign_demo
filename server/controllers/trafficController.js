@@ -2,14 +2,16 @@ const path = require('path');
 const { checkToken } = require('./jwtController');
 const text = require('../assets/public/text.json').trafficTicket.names;
 const {
-  makeTrafficTicket,
-} = require('../docusign/envelopes/makeTrafficTicket');
+  getIdvWorkflowId,
+} = require('../docusign/workflow');
 const { makeSmsEnvelope } = require('../docusign/envelopes/makeSmsEnvelope');
 const {
   getRecipientViewUrl,
-  sendEnvelope,
   getEnvelopeTabData,
 } = require('../docusign/envelope');
+const {
+  sendEnvelopeFromTemplate,
+} = require('../docusign/envelopByTemplate');
 const {
   hasSmsEnabled,
   hasCertifiedDeliveryEnabled,
@@ -21,13 +23,10 @@ const AppError = require('../utils/appError');
 // Set constants
 const signerClientId = '1000'; // The id of the signer within this application.
 const docsPath = path.resolve(__dirname, '../docusign/pdf');
-const docFile = 'TrafficTicket.pdf';
 const docFile2 = 'PoliceWitnessStatement.pdf';
 const dsReturnUrl =
   process.env.REDIRECT_URI + '/receive-traffic-ticket/submitted-ticket';
 const dsPingUrl = process.env.REDIRECT_URI + '/';
-const mitigationClerkName = text.mitigationClerkName;
-const contestedClerkName = text.contestedClerkName;
 
 /**
  * Controller that creates an envelope and returns a view URL for an
@@ -44,22 +43,15 @@ const createController = async (req, res, next) => {
   const envelopeArgs = {
     signerEmail: body.signerEmail,
     signerName: body.signerName,
+    countryCode: body.countryCode,
+    phoneNumber: body.phoneNumber,
+    templateId: '2f9bf387-68e4-4168-b90a-df821830161c', // docusign定义的模板id
     status: 'sent',
-    docFile: path.resolve(docsPath, docFile),
 
     // Embedded signing arguments
     signerClientId: signerClientId,
     dsReturnUrl: dsReturnUrl,
     dsPingUrl: dsPingUrl,
-
-    // Traffic ticket specific arguments
-    mitigationClerkName: mitigationClerkName,
-    contestedClerkName: contestedClerkName,
-
-    // Payment arguments
-    gatewayAccountId: process.env.PAYMENT_GATEWAY_ACCOUNT_ID,
-    gatewayName: process.env.PAYMENT_GATEWAY_NAME,
-    gatewayDisplayName: process.env.PAYMENT_GATEWAY_DISPLAY_NAME,
   };
   const args = {
     accessToken: req.session.accessToken,
@@ -89,13 +81,19 @@ const createController = async (req, res, next) => {
     }
 
     // Step 1 start
-    // Get the envelope definition for the envelope
-    const envelopeDef = makeTrafficTicket(args.envelopeArgs);
-    // Step 1 end
+    // Get the workflowId and add it to envelopeArgs
+    const workflowId = await getIdvWorkflowId(args);
+    // console.log(6666, workflowId)
+    // If IDV is not enabled in the account, send back error message.
+    if (workflowId === null) {
+      throw new AppError(403, errorText.idvNotEnabled);
+    }
+
+    args.envelopeArgs.workflowId = workflowId;
 
     // Step 2 start
     // Send the envelope and get the envelope ID
-    const envelopeId = await sendEnvelope(envelopeDef, args);
+    const envelopeId = await sendEnvelopeFromTemplate(args);
     // Step 2 end
 
     // Step 3 start
