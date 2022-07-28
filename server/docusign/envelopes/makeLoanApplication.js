@@ -150,12 +150,15 @@ function makeLoanApplicationEnvelope(args) {
     recipientId: '1',
     documentId: '1',
     pageNumber: '1',
-    xPosition: '405',
+    xPosition: '105',
     yPosition: '292',
     required: 'true',
     tabLabel: '城市',
     height: '23',
     width: '180',
+    value: args.contractAmount,
+    shared: true, // 通过配置share和locked实现预填写字段
+    locked: true,
   });
 
   /////////////// Create radio tabs ///////////////
@@ -196,7 +199,7 @@ function makeLoanApplicationEnvelope(args) {
 
   /////////////// Create recipients of the envelope ///////////////
   // Create signer recipients to sign the document with the tabs
-  let signer = eSignSdk.Signer.constructFromObject({
+  let signer1 = eSignSdk.Signer.constructFromObject({
     email: args.signerEmail,
     name: args.signerName,
     roleName: 'partyA',
@@ -228,19 +231,19 @@ function makeLoanApplicationEnvelope(args) {
       // zipTabs: [zip],
     }),
   });
-  // let signer2 = eSignSdk.Signer.constructFromObject({
-  //   email: args.signerEmail,
-  //   name: args.signerName,
-  //   clientUserId: args.signerClientId,
-  //   recipientId: '2',
-  //   routingOrder: '2',
-  //   roleName: 'partyB',
-  //   tabs: eSignSdk.Tabs.constructFromObject({
-  //     dateSignedTabs: [dateSigned2],
-  //     // initialHereTabs: [initialHere],
-  //     signHereTabs: [signHere2],
-  //   }),
-  // });
+  let signer2 = eSignSdk.Signer.constructFromObject({
+    email: '441974767@qq.com',
+    name: 's smile',
+    clientUserId: '1000',
+    recipientId: '2',
+    routingOrder: '2',
+    roleName: 'partyB',
+    tabs: eSignSdk.Tabs.constructFromObject({
+      dateSignedTabs: [dateSigned2],
+      // initialHereTabs: [initialHere],
+      signHereTabs: [signHere2],
+    }),
+  });
 
   // let signer = signer1
   // if (args.roleName === 'partyB') {
@@ -250,7 +253,7 @@ function makeLoanApplicationEnvelope(args) {
   // Create recipient object
   let recipients = eSignSdk.Recipients.constructFromObject({
     recipientCount: 2,
-    signers: [signer],
+    signers: [signer1, signer2],
   });
 
   /////////////// Create conditional recipient related objects ///////////////

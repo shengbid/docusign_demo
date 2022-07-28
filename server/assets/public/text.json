@@ -39,8 +39,8 @@
     "trafficTicket": "模板信封与短信验证",
     "passportApplication": "模板选择与已签约列表",
     "smallBusinessFeatures": "<li>预填写字段</li><li>嵌入式签名</li><li>自定义信封</li><li>可配置签名者</li>",
-    "passportFeatures": "<li>短信验证</li><li>可配置短信号码</li><li>可配置签名者</li><li>docusign模板生成信封</li>",
-    "trafficTicketFeatures": "<li>可选择模板</li><li>签名者信息</li><li>已签约文件列表</li><li>文件列表查看</li>"
+    "trafficTicketFeatures": "<li>短信验证</li><li>复合模板</li><li>可配置签名者</li><li>docusign模板生成信封</li>",
+    "passportFeatures": "<li>可选择模板</li><li>签名者信息</li><li>已签约文件列表</li><li>文件列表查看</li>"
   },
   "login": {
     "title": "Welcome to the MyGovernment Sample Application",

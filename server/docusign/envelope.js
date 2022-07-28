@@ -23,6 +23,7 @@ const sendEnvelope = async (envelopeDefinition, args) => {
 
   let envelopeId = results.envelopeId;
 
+  // 官方例子实际使用有问题,版本问题?
   // let prefillTabs = eSignSdk.PrefillTabs.constructFromObject({
   //   'textTabs':[{ 
   //     recipientId: '1',
