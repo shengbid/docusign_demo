@@ -2,7 +2,7 @@ import './App.css';
 import React, { useEffect, useRef, useState } from 'react';
 import Home from './pages/Home';
 import Login from './pages/Login';
-import Passport from './pages/Passport';
+import Passport from './pages/PassPort/Passport';
 import ErrorPage from './pages/ErrorPage';
 import {
   BrowserRouter as Router,
@@ -23,6 +23,7 @@ import './assets/scss/main.scss';
 import Header from './components/Header';
 import WitnessStatement from './pages/TrafficTicket/WitnessStatement';
 import { handleError } from './api/apiHelper';
+import PassportSign from './pages/PassPort/PassportSign'
 
 function App() {
   let mountedRef = useRef(true);
@@ -88,14 +89,25 @@ function App() {
             <Route element={<RequireAuth />}>
               <Route
                 path="apply-for-passport"
-                element={
-                  <Passport
-                    text={textContent.passport}
-                    formText={textContent.formLabels}
-                    btsText={textContent.behindTheScenes}
-                  />
-                }
-              />
+                element={<UseCaseIndex />}
+              >
+                <Route
+                  path=""
+                  element={
+                    <Passport
+                      text={textContent.passport}
+                      formText={textContent.formLabels}
+                      btsText={textContent.behindTheScenes}
+                    />
+                  }
+                />
+                <Route
+                  path="passport-sign"
+                  element={
+                    <PassportSign />
+                  }
+                />
+              </Route>
             </Route>
 
             <Route element={<RequireAuth />}>

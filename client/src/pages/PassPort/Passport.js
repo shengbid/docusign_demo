@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { handleError, sendRequest } from '../api/apiHelper';
-import Form from '../components/Form';
+import { handleError, sendRequest } from '../../api/apiHelper';
+import Form from '../../components/Form';
 import { useNavigate } from 'react-router-dom';
-import BehindTheScenes from '../components/BehindTheScenes';
+import BehindTheScenes from '../../components/BehindTheScenes';
 
 function Passport({ text, formText, btsText }) {
   let navigate = useNavigate();
