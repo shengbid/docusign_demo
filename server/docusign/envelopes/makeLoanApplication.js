@@ -206,6 +206,26 @@ function makeLoanApplicationEnvelope(args) {
     recipientId: '1',
     clientUserId: args.signerClientId,
     routingOrder: '1',
+    // emailNotification: {  // 如果需要手机号验证,打开这段代码;需要传入countryCode,phoneNumber
+    //   supportedLanguage: 'zh_CN'
+    // },
+    // identityVerification: { 
+    //   workflowId: args.workflowId, 
+    //   steps: null, 
+    //   "inputOptions":
+    //     [{
+    //       "name":"phone_number_list",
+    //       "valueType":"PhoneNumberList",
+    //       "phoneNumberList":[
+    //         {
+    //           "countryCode":args.countryCode,
+    //           "code":"1",
+    //           "number":args.phoneNumber
+    //         }
+    //       ]  
+    //     }], 
+    //   "idCheckConfigurationName":""
+    // },
     tabs: eSignSdk.Tabs.constructFromObject({
       // checkboxTabs: [check1, check2, check3, check4],
       dateSignedTabs: [dateSigned1],

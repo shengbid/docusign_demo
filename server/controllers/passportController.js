@@ -1,34 +1,17 @@
-const path = require('path');
 const { checkToken } = require('./jwtController');
 const {
-  makePassportApplicationEnvelope,
-} = require('../docusign/envelopes/makePassportApplication');
-const { getRecipientViewUrl, sendEnvelope } = require('../docusign/envelope');
+  makeEnvelope,
+} = require('../docusign/useTemplate');
+const { getRecipientViewUrl } = require('../docusign/envelope');
 const { getIdvWorkflowId } = require('../docusign/workflow');
 const errorText = require('../assets/errorText.json').api;
 const AppError = require('../utils/appError');
-const text = require('../assets/public/text.json').smallBusinessLoan;
 
 // Set constants
-const docsPath = path.resolve(__dirname, '../docusign/pdf');
-const docFile = 'sign1.pdf';
-
 const signerClientId = '1001';
 const dsReturnUrl =
-  process.env.REDIRECT_URI + '/complete';
-const dsPingUrl = process.env.REDIRECT_URI + '/index';
-const smallLenderName = text.names.smallLenderName;
-const bigLenderName = text.names.bigLenderName;
-const loanBenchmark = 50000;
-const brandName = text.envelope.brandName;
-const defaultBrandLanguage = 'zh_CN';
-
-const colors = [
-  { name: 'buttonPrimaryBackground', value: '#dad1e9' },
-  { name: 'buttonPrimaryText', value: '#333333' },
-  { name: 'headerBackground', value: '#674ea7' },
-  { name: 'headerText', value: '#ffffff' },
-];
+  process.env.REDIRECT_URI + '/apply-for-passport/passport-sign';
+const dsPingUrl = process.env.REDIRECT_URI + '/';
 
 /**
  * Controller that creates and sends an envelope to the signer.
@@ -45,27 +28,12 @@ const createController = async (req, res, next) => {
     signerName: body.signerName,
     countryCode: body.countryCode,
     phoneNumber: body.phoneNumber,
+    templateId: body.templateId,
     status: 'sent',
-    docFile: path.resolve(docsPath, docFile),
 
     signerClientId: signerClientId,
     dsReturnUrl: dsReturnUrl,
     dsPingUrl: dsPingUrl,
-
-    // Loan specific arguments
-    smallLenderName: smallLenderName,
-    bigLenderName: bigLenderName,
-    loanBenchmark: loanBenchmark,
-
-    // Branding arguments
-    brandName: brandName,
-    defaultBrandLanguage: defaultBrandLanguage,
-    colors: colors,
-
-    // Payment arguments
-    // gatewayAccountId: process.env.PAYMENT_GATEWAY_ACCOUNT_ID,
-    // gatewayName: process.env.PAYMENT_GATEWAY_NAME,
-    // gatewayDisplayName: process.env.PAYMENT_GATEWAY_DISPLAY_NAME,
   };
   const args = {
     accessToken: req.session.accessToken,
@@ -101,14 +69,9 @@ const createController = async (req, res, next) => {
     // Step 1 end
 
     // Step 2 start
-    // Get the envelope definition for the envelope
-    const envelopeDef = makePassportApplicationEnvelope(args.envelopeArgs);
-    // Step 2 end
-
-    // Step 3 start
     // Send the envelope and get the envelope ID
-    const envelopeId = await sendEnvelope(envelopeDef, args);
-    // Step 3 end
+    const envelopeId = await sendEnvelopeFromTemplate(args.envelopeArgs);
+    // Step 2 end
 
     // Set results. We don't need the envelopeId for the rest of this example,
     // but you can store it for use later in other use cases.
