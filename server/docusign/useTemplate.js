@@ -60,7 +60,7 @@ async function makeEnvelope(args) {
   // create the envelope definition
   let env = new docusign.EnvelopeDefinition();
   let signers = args.signers.map((item, i) => {
-    return {
+    const newItem = {
       email: item.signerEmail,
       name: item.signerName,
       roleName: item.roleName,
@@ -68,8 +68,10 @@ async function makeEnvelope(args) {
       clientUserId: item.signerClientId,
       emailNotification: {
         supportedLanguage: 'zh_CN'
-      },
-      identityVerification: { 
+      }
+    }
+    if (item.identityVerification) { // 如果有短信验证
+      newItem.identityVerification = {
         workflowId: args.workflowId, 
         steps: null, 
         "inputOptions":
@@ -87,6 +89,7 @@ async function makeEnvelope(args) {
         "idCheckConfigurationName":""
       }
     }
+    return newItem
   })
 
   const compTemplate = docusign.CompositeTemplate.constructFromObject({
@@ -120,6 +123,7 @@ async function makeEnvelope(args) {
   doc1.fileExtension = "html";
   doc1.documentId = "1";
 
+  // 增加附件, 如果要添加附件修改doc1
   // create a composite template for the added document
   let compTemplate2 = docusign.CompositeTemplate.constructFromObject({
     compositeTemplateId: "2",

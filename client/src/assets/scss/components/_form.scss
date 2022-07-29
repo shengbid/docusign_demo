@@ -34,6 +34,70 @@
     margin-bottom: 30px;
   }
 }
+.template-holder {
+  grid-column: 2 / 3;
+  grid-row: 2 / 3;
+  width: 800px;
+  height: 460px;
+  background-color: v.$whiteColor;
+  padding: v.$formPadding;
+  margin-bottom: 30px;
+  border-radius: v.$borderRadius;
+  box-shadow: v.$formDropShadow;
+  label {
+    font-size: 14px;
+    flex-basis: 40%;
+  }
+
+  label:after {
+    content: '*';
+    padding-left: 8px;
+    font-size: 17px;
+    color: v.$redColor;
+    line-height: v.$bodyTextSize;
+    font-family: sans-serif;
+  }
+
+  select {
+    width: 50%;
+    box-sizing: border-box;
+    padding: 7px;
+    font-family: Raleway, sans-serif;
+    font-weight: 500;
+    margin-bottom: 30px;
+  }
+  .singer-list {
+    border: 1px solid #ddd;
+    border-radius: 2px;
+    margin-bottom: 40px;
+    .signer-table {
+      width: 100%;
+      border-spacing: 0;
+      .theader {
+        height: 35px;
+        th {
+          border-bottom: 1px solid #ddd;
+          border-right: 1px solid #ddd;
+          &:last-child {
+            border-right: none;
+          }
+        }
+      }
+      .nodata {
+        height: 40px;
+        color: #999;
+        text-align: center;
+      }
+    }
+    input {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 7px;
+      font-family: Raleway, sans-serif;
+      font-weight: 500;
+    }
+  }
+}
 
 @media (max-width: v.$tabletScreenSize) {
   .form-holder {
