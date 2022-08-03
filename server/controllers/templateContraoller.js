@@ -18,7 +18,7 @@ const {
 // Set constants
 const signerClientId = '1000'; // The id of the signer within this application.
 const dsReturnUrl =
-  process.env.REDIRECT_URI + '/complete';
+  process.env.REDIRECT_URI + '/apply-for-passport/passport-sign';
 const dsPingUrl = process.env.REDIRECT_URI + '/index';
 
 // 创建信封
@@ -71,7 +71,7 @@ const templateController = async (req, res, next) => {
     // req.session.loanAppSignerName = body.signerName;
 
     // Send back redirect URL for embedded signing
-    res.status(200).send({status: 200, data: results.envelopeId});
+    res.status(200).send(results.envelopeId);
   }
 };
 
@@ -84,8 +84,8 @@ const templateViewController = async (req, res, next) => {
 
   // Create args
   const envelopeArgs = {
-    signerEmail: body.signerEmail,
-    signerName: body.signerName,
+    signerEmail: body.email,
+    signerName: body.name,
     roleName: body.roleName,
 
     // Embedded signing arguments
@@ -120,7 +120,7 @@ const templateViewController = async (req, res, next) => {
     req.session.loanAppSignerName = body.signerName;
 
     // Send back redirect URL for embedded signing
-    res.status(200).send({status: 200, data: results.redirectUrl});
+    res.status(200).send(results.redirectUrl);
   }
 };
 

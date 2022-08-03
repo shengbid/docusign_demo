@@ -8,7 +8,8 @@ function Passport({ text }) {
   const [requesting, setRequesting] = useState(false);
   const [templateList, setTemplateList] = useState([])
   const [singers, setSingers] = useState([])
-  const [params, setParams] = useState({templateId: ''})
+  const [templateId, setTemplateId] = useState('')
+  const [envelopId, setEnvelopId] = useState('')
 
   const getTemplate = async () => {
     try {
@@ -28,9 +29,7 @@ function Passport({ text }) {
 
   // 选择模板 获取模板配置的签约人角色
   const changeTemplate = async(e) => {
-    setParams({
-      templateId: e.target.value,
-    })
+    setTemplateId(e.target.value)
     const body = {
       templateId: e.target.value,
     };
@@ -64,27 +63,48 @@ function Passport({ text }) {
   // Sends POST request to server to send envelope based on the
   // info the user provided in the form.
   async function handleSubmit() {
-    console.log(params, singers)
+    console.log(templateId, singers)
     setRequesting(true);
 
     // Make request body
-    // const body = {
-    //   signerName: event.firstName + ' ' + event.lastName,
-    //   signerEmail: event.signerEmail,
-    // };
+    const body = {
+      templateId,
+      signers: singers,
+    };
 
-    // // Send request to server
-    // try {
-    //   const response = await sendRequest('/passportApplication', body);
-    //   console.log(response.data);
+    // Send request to server
+    try {
+      const response = await sendRequest('/template/sendByTemplate', body);
+      console.log(response.data);
+      setEnvelopId(response.data)
+      // Redirect to success screen
+      // navigate('/success');
+    } catch (error) {
+      console.log(error);
+      const errorPageText = handleError(error);
+      navigate('/error', { state: errorPageText });
+    }
+  }
+  // 生成签约视图
+  async function toSign(item) {
+    console.log(item)
 
-    //   // Redirect to success screen
-    //   navigate('/success');
-    // } catch (error) {
-    //   console.log(error);
-    //   const errorPageText = handleError(error);
-    //   navigate('/error', { state: errorPageText });
-    // }
+    // Make request body
+    const body = {
+      ...item
+    };
+
+    // Send request to server
+    try {
+      const response = await sendRequest('/template/getViewByEnvelope', body);
+      if (response.status === 200) {
+        window.location = response.data;
+      }
+    } catch (error) {
+      console.log(error);
+      const errorPageText = handleError(error);
+      navigate('/error', { state: errorPageText });
+    }
   }
 
   return (
@@ -125,7 +145,7 @@ function Passport({ text }) {
                         <input 
                           type="text" 
                           name="roleName" 
-                          value={item.roleName} 
+                          defaultValue={item.roleName} 
                           onChange={(e) => changeTable(e, index)} 
                         />
                       </td>
@@ -133,7 +153,7 @@ function Passport({ text }) {
                         <input 
                           type="text" 
                           name="name"
-                          value={item.name} 
+                          defaultValue={item.name} 
                           onChange={(e) => changeTable(e, index)} 
                         />
                       </td>
@@ -141,7 +161,7 @@ function Passport({ text }) {
                         <input 
                           type="text" 
                           name="email"
-                          value={item.email} 
+                          defaultValue={item.email} 
                           onChange={(e) => changeTable(e, index)} 
                         />
                       </td>
@@ -149,7 +169,7 @@ function Passport({ text }) {
                         <input 
                           type="text" 
                           name="countryCode"
-                          value={item.countryCode} 
+                          defaultValue={item.countryCode} 
                           onChange={(e) => changeTable(e, index)} 
                           placeholder="例: +86" 
                         />
@@ -158,7 +178,7 @@ function Passport({ text }) {
                         <input 
                           type="text" 
                           name="phoneNumber"
-                          value={item.phoneNumber}
+                          defaultValue={item.phoneNumber}
                           onChange={(e) => changeTable(e, index)}
                           placeholder="例: 13512341234" 
                         />
@@ -185,6 +205,24 @@ function Passport({ text }) {
                 取消
               </button>
             </div>
+
+            {envelopId ? <div className='signer'>
+              <div className="form-text-container">
+                <div>信封id (生成信封id后,签约人选择签约,根据信封id生成签约视图)</div>
+              </div>
+              <div>{envelopId}</div>
+              <div className="form-text-container">
+                <label>待签约列表</label>
+              </div>
+              <ul>
+                {singers.map(item => 
+                  <li key={item.id}>
+                    <span>{item.name}你有一份待签约文件</span> 
+                    <button onClick={() => toSign(item)}>签约</button>
+                  </li>
+                )}
+              </ul>
+            </div> : null}
           </form>
         </div>
       </div>

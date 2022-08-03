@@ -1,6 +1,6 @@
 const { checkToken } = require('./jwtController');
 const {
-  makeEnvelope,
+  sendEnvelopeFromTemplate,
 } = require('../docusign/useTemplate');
 const { getRecipientViewUrl } = require('../docusign/envelope');
 const { getIdvWorkflowId } = require('../docusign/workflow');
@@ -76,10 +76,9 @@ const createController = async (req, res, next) => {
     // Set results. We don't need the envelopeId for the rest of this example,
     // but you can store it for use later in other use cases.
     // results = { envelopeId: envelopeId };
-    const viewUrl = await getRecipientViewUrl(envelopeId, args);
 
     // Set results
-    results = { envelopeId: envelopeId, redirectUrl: viewUrl };
+    results = { envelopeId: envelopeId };
   } catch (error) {
     console.log('Error sending the envelope.');
     next(error);
@@ -88,10 +87,9 @@ const createController = async (req, res, next) => {
   if (results) {
     // res.status(200).send('Envelope successfully sent!');
     req.session.loanAppEnvelopeId = results.envelopeId;
-    req.session.loanAppSignerName = body.signerName;
 
     // Send back redirect URL for embedded signing
-    res.status(200).send({status: 200, data: results});
+    res.status(200).send(results);
   }
 };
 

@@ -61,8 +61,8 @@ async function makeEnvelope(args) {
   let env = new docusign.EnvelopeDefinition();
   let signers = args.signers.map((item, i) => {
     const newItem = {
-      email: item.signerEmail,
-      name: item.signerName,
+      email: item.email,
+      name: item.name,
       roleName: item.roleName,
       recipientId: item.recipientId,
       clientUserId: item.signerClientId,

@@ -48,6 +48,12 @@
     font-size: 14px;
     flex-basis: 40%;
   }
+  .signer {
+    label {
+      flex-basis: 80%;
+      margin-top: 25px;
+    }
+  }
 
   label:after {
     content: '*';
