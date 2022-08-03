@@ -81,7 +81,6 @@ const templateViewController = async (req, res, next) => {
   // if it is expired
   await checkToken(req);
   const {body} = req
-
   // Create args
   const envelopeArgs = {
     signerEmail: body.email,

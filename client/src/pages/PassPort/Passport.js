@@ -9,7 +9,7 @@ function Passport({ text }) {
   const [templateList, setTemplateList] = useState([])
   const [singers, setSingers] = useState([])
   const [templateId, setTemplateId] = useState('')
-  const [envelopId, setEnvelopId] = useState('')
+  const [envelopeId, setEnvelopId] = useState('')
 
   const getTemplate = async () => {
     try {
@@ -86,15 +86,14 @@ function Passport({ text }) {
     }
   }
   // 生成签约视图
-  async function toSign(item) {
-    console.log(item)
-
+  const toSign = async (item) => {
+    
     // Make request body
     const body = {
-      ...item
+      ...item,
+      envelopeId,
     };
 
-    // Send request to server
     try {
       const response = await sendRequest('/template/getViewByEnvelope', body);
       if (response.status === 200) {
@@ -205,12 +204,13 @@ function Passport({ text }) {
                 取消
               </button>
             </div>
+          </form>
 
-            {envelopId ? <div className='signer'>
+            {envelopeId ? <div className='signer'>
               <div className="form-text-container">
-                <div>信封id (生成信封id后,签约人选择签约,根据信封id生成签约视图)</div>
+                <label>信封id (生成信封id后,签约人选择签约,根据信封id生成签约视图)</label>
               </div>
-              <div>{envelopId}</div>
+              <div>{envelopeId}</div>
               <div className="form-text-container">
                 <label>待签约列表</label>
               </div>
@@ -223,7 +223,7 @@ function Passport({ text }) {
                 )}
               </ul>
             </div> : null}
-          </form>
+
         </div>
       </div>
     </section>
