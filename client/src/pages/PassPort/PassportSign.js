@@ -1,32 +1,21 @@
 import React, {useState, useEffect} from 'react'
 import { sendRequest } from '../../api/apiHelper';
+import moment from 'moment'
 
 const PassportSign = () => {
   const [signList, setSignList] = useState([])
+  const dateTime = 'YYYY-MM-DD HH:mm:ss'
 
   // 获取已签约列表
   const getList = async () => {
-    const date = new Date()
-    let year = date.getFullYear()
-    let month = date.getMonth() - 1
-    if (month < 1) {
-      month = 12
-      year = year - 1
-    }
 
     const body = {
       folderIds: 'completed, waiting_for_others, awaiting_my_signature', // 信封状态: 已完成,等待其他人签署,等待我签署
-      fromDate: `${year}-${month}-1`, // 日期限制
+      fromDate: moment().subtract(30, 'days').format(), // 日期限制
     }
     try {
       const {data} = await sendRequest('/template/getEnvelopes', body);
-      setSignList(data.map((item, index) => {
-        return {
-          ...item,
-          id: `${Date.now()}${index}`
-        }
-      }))
-      console.log(data)
+      setSignList(data)
 
     } catch (error) {
       console.log(error);
@@ -39,46 +28,59 @@ const PassportSign = () => {
 
   return (
     <div className='signList'>
-      <h2>签约成功</h2>
+      <h2 className='success'>签约成功</h2>
       <div className='list'>
-        <div className='title'>已签约列表</div>
-        <table className='signer-table'>
+        <div className='listtitle'>已签约列表</div>
+        <ul className='enveloplist'>
+        {signList && signList.length ? signList.map(item =>
+          <li className='item' key={item.envelopeId}>
+            <div className='title'>
+              <span className='label'>
+                合同名称:<span className='text'>{item.emailSubject}</span>
+              </span>
+              <span className='label'>
+                发送人:<span className='text'>{item.sender.userName}</span>
+              </span>
+              <button className='btn'>查看合同</button>
+              <button className='btn'>下载合同</button>
+            </div>
+            <div className='signers'>
+              <div className='person'>签约人列表:</div>
+              <table className='signer-table'>
                 <thead>
-                  <tr className='theader'>
-                    <th style={{width: '20%'}}>合同名称</th>
+                  <tr className='tr'>
+                    <th style={{width: '20%'}}>姓名</th>
+                    <th style={{width: '20%'}}>email</th>
                     <th style={{width: '20%'}}>签约时间</th>
                     <th style={{width: '20%'}}>签约状态</th>
-                    <th style={{width: '20%'}}>区号</th>
                     <th style={{width: '20%'}}>操作</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {signList && signList.length ? signList.map((item, index) =>
-                    <tr key={item.id}>
-                      <td>
-                        {item.name}
-                      </td>
-                      <td>
-                        {item.name}
-                      </td>
-                      <td>
-                        {item.name}
-                      </td>
-                      <td>
-                        {item.name}
-                      </td>
-                     
-                      <td>
-                        <button>查看</button>
-                        <button>下载</button>
-                      </td>
-                    </tr>
-                    ) : 
-                    <tr className='nodata'>
-                      <td colSpan={5}>请先选择模板</td>
-                    </tr>}
+                {item.recipients.signers.map(ss => 
+                  <tr key={ss.recipientId} className='tr'>
+                    <td>
+                      {ss.name}
+                    </td>
+                    <td>
+                      {ss.email}
+                    </td>
+                    <td>
+                      {ss.signedDateTime ? moment(ss.signedDateTime).format(dateTime) : '-'}
+                    </td>
+                    <td>
+                      {ss.status}
+                    </td>
+                    <td>
+                      {ss.status === 'sent' ? <button>去签约</button> : <>-</>}
+                    </td>
+                  </tr>
+                )}
                 </tbody>
-              </table>
+                </table>
+            </div>
+          </li>) : null}
+        </ul>
       </div>
     </div>
   )

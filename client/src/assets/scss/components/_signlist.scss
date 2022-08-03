@@ -1,3 +1,54 @@
 .signList {
-  
+  width: 80%;
+  margin: 0 auto;
+  background-color: #fff;
+  .success {
+    text-align: center;
+    padding: 25px 0;
+  }
+  .list {
+    .listtitle {
+      padding-left: 24px;
+      font-size: 16px;
+      font-weight: bold;
+    }
+    .item {
+      .label {
+        font-weight: bold;
+        margin-right: 40px;
+        .text {
+          margin-left: 6px;
+          font-weight: normal;
+        }
+      }
+      .btn {
+        margin-right: 40px;
+      }
+    }
+    .signers {
+      .person {
+        margin-bottom: 12px;
+        margin-top: 10px;
+      }
+      .signer-table {
+        width: 90%;
+        border-spacing: 0;
+        border: 1px solid #ddd;
+        border-bottom: none;
+        border-radius: 2px;
+        margin-bottom: 20px;
+        .tr {
+          height: 35px;
+          th, td {
+            border-bottom: 1px solid #ddd;
+            border-right: 1px solid #ddd;
+            padding-left: 8px;
+            &:last-child {
+              border-right: none;
+            }
+          }
+        }
+      }
+    }
+  }
 }
