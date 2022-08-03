@@ -269,7 +269,7 @@ const envelopDocumentsController = async (req, res, next) => {
   }
 
   if (results) {
-    res.status(200).send({ status: 200, data: results });
+    res.status(200).send(results);
   }
 };
 
