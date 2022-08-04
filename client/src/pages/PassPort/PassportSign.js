@@ -1,17 +1,19 @@
 import React, {useState, useEffect} from 'react'
-import { sendRequest } from '../../api/apiHelper';
+import { handleError, sendRequest } from '../../api/apiHelper';
+import { useNavigate } from 'react-router-dom';
 import moment from 'moment'
 
 const PassportSign = () => {
   const [signList, setSignList] = useState([])
   const dateTime = 'YYYY-MM-DD HH:mm:ss'
+  let navigate = useNavigate();
 
   // 获取已签约列表
   const getList = async () => {
 
     const body = {
       folderIds: 'completed, waiting_for_others, awaiting_my_signature', // 信封状态: 已完成,等待其他人签署,等待我签署
-      fromDate: moment().subtract(30, 'days').format(), // 日期限制
+      fromDate: moment().subtract(30, 'days').format(), // 日期范围
     }
     try {
       const {data} = await sendRequest('/template/getEnvelopes', body);
@@ -25,6 +27,26 @@ const PassportSign = () => {
   useEffect(() => {
     getList()
   }, [])
+
+ // 生成签约视图
+ const toSign = async (item) => {
+    
+  // Make request body
+  const body = {
+    ...item,
+  };
+
+  try {
+    const response = await sendRequest('/template/getViewByEnvelope', body);
+    if (response.status === 200) {
+      window.location = response.data;
+    }
+  } catch (error) {
+    console.log(error);
+    const errorPageText = handleError(error);
+    navigate('/error', { state: errorPageText });
+  }
+}
 
   return (
     <div className='signList'>
@@ -72,7 +94,7 @@ const PassportSign = () => {
                       {ss.status}
                     </td>
                     <td>
-                      {ss.status === 'sent' ? <button>去签约</button> : <>-</>}
+                      {ss.status === 'sent' ? <button onClick={() => toSign({...ss, envelopeId: item.envelopeId})}>去签约</button> : <>-</>}
                     </td>
                   </tr>
                 )}
