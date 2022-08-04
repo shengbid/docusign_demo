@@ -1,7 +1,9 @@
 import React, {useState, useEffect} from 'react'
 import { handleError, sendRequest } from '../../api/apiHelper';
+import axios from '../../api/request';
 import { useNavigate } from 'react-router-dom';
 import moment from 'moment'
+import FileSaver from 'file-saver'
 
 const PassportSign = () => {
   const [signList, setSignList] = useState([])
@@ -30,7 +32,6 @@ const PassportSign = () => {
 
  // 生成签约视图
  const toSign = async (item) => {
-    
   // Make request body
   const body = {
     ...item,
@@ -40,6 +41,29 @@ const PassportSign = () => {
     const response = await sendRequest('/template/getViewByEnvelope', body);
     if (response.status === 200) {
       window.location = response.data;
+    }
+  } catch (error) {
+    console.log(error);
+    const errorPageText = handleError(error);
+    navigate('/error', { state: errorPageText });
+  }
+}
+
+// 下载合同
+const toDownload = async (item) => {
+  try {
+    const {data} = await axios({
+      url: '/template/getEnvelopePdfs', 
+      method: 'post',
+      responseType: 'blob',
+      data: {envelopeId: item.envelopeId}
+    });
+    console.log(data)
+    if (data && data.size) {
+      FileSaver.saveAs(
+        data,
+        item.emailSubject
+      )
     }
   } catch (error) {
     console.log(error);
@@ -64,7 +88,8 @@ const PassportSign = () => {
                 发送人:<span className='text'>{item.sender.userName}</span>
               </span>
               <button className='btn'>查看合同</button>
-              <button className='btn'>下载合同</button>
+              {item.status === "completed" ? 
+                <button className='btn' onClick={() => toDownload(item)}>下载合同</button> : null}
             </div>
             <div className='signers'>
               <div className='person'>签约人列表:</div>
