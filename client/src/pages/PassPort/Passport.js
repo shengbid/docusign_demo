@@ -111,6 +111,12 @@ function Passport({ text }) {
       <div className="container">
         <div className="header-container">
           <h1>{text.title}</h1>
+          <button
+            className="back-button"
+            onClick={() => navigate('/apply-for-passport/passport-sign')}
+          >
+          查看已发起信封列表
+        </button>
         </div>
         <div className="template-holder">
           <form>

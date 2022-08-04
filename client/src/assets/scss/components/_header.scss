@@ -39,6 +39,16 @@
   text-align: center;
   line-height: 40px;
 }
+.back-button {
+  position: absolute;
+  top: 108px;
+  right: 18%;
+  padding: 8px 20px;
+  color: #fff;
+  background-color: #1890ff;
+  border: none;
+  border-radius: 3px;
+}
 
 @media (max-width: v.$tabletScreenSize) {
   .navbar {

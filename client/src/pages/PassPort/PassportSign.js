@@ -89,6 +89,12 @@ const handleCancel = () => {
     <div className='sign-contanier'>
       <div className='signList'>
         <h2 className='success'>签约成功</h2>
+        <button
+          className="back-button"
+          onClick={() => navigate('/apply-for-passport')}
+        >
+          返回
+        </button>
         <div className='list'>
           <div className='listtitle'>已签约列表</div>
           <ul className='enveloplist'>
