@@ -1,0 +1,40 @@
+.modal-contanier {
+  width: 100%;
+  height: 100vh;
+  background-color: rgba($color: #000000, $alpha: 0.4);
+  z-index: 500;
+  position: fixed;
+  top: 0;
+  .modal-wrap {
+    width: 600px;
+    height: 600px;
+    margin: 100px auto 0;
+    background-color: #fff;
+    .modal-box {
+      padding: 24px;
+      .header {
+        height: 40px;
+        border-bottom: 1px solid #ddd;
+        .title {
+          float: left;
+        }
+        .close {
+          font-size: 18px;
+          float: right;
+          cursor: pointer;
+        }
+      }
+      .content {
+        padding-top: 24px;
+        .file {
+          height: 30px;
+          color: #1890ff;
+          cursor: pointer;
+        }
+        .imgList {
+          
+        }
+      }
+    }
+  }
+}
