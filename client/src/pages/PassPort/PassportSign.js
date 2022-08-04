@@ -4,9 +4,12 @@ import axios from '../../api/request';
 import { useNavigate } from 'react-router-dom';
 import moment from 'moment'
 import FileSaver from 'file-saver'
+import Modal from '../../components/Modal'
 
 const PassportSign = () => {
   const [signList, setSignList] = useState([])
+  const [modalVisible, setModalVisible] = useState(false)
+  const [envelopeId, setEnvelopId] = useState('')
   const dateTime = 'YYYY-MM-DD HH:mm:ss'
   let navigate = useNavigate();
 
@@ -72,63 +75,77 @@ const toDownload = async (item) => {
   }
 }
 
+// 查看文件列表
+const toView = async (envelopeId) => {
+  setEnvelopId(envelopeId)
+  setModalVisible(true)
+}
+
+const handleCancel = () => {
+  setModalVisible(false)
+}
+
   return (
-    <div className='signList'>
-      <h2 className='success'>签约成功</h2>
-      <div className='list'>
-        <div className='listtitle'>已签约列表</div>
-        <ul className='enveloplist'>
-        {signList && signList.length ? signList.map(item =>
-          <li className='item' key={item.envelopeId}>
-            <div className='title'>
-              <span className='label'>
-                合同名称:<span className='text'>{item.emailSubject}</span>
-              </span>
-              <span className='label'>
-                发送人:<span className='text'>{item.sender.userName}</span>
-              </span>
-              <button className='btn'>查看合同</button>
-              {item.status === "completed" ? 
-                <button className='btn' onClick={() => toDownload(item)}>下载合同</button> : null}
-            </div>
-            <div className='signers'>
-              <div className='person'>签约人列表:</div>
-              <table className='signer-table'>
-                <thead>
-                  <tr className='tr'>
-                    <th style={{width: '20%'}}>姓名</th>
-                    <th style={{width: '20%'}}>email</th>
-                    <th style={{width: '20%'}}>签约时间</th>
-                    <th style={{width: '20%'}}>签约状态</th>
-                    <th style={{width: '20%'}}>操作</th>
-                  </tr>
-                </thead>
-                <tbody>
-                {item.recipients.signers.map(ss => 
-                  <tr key={ss.recipientId} className='tr'>
-                    <td>
-                      {ss.name}
-                    </td>
-                    <td>
-                      {ss.email}
-                    </td>
-                    <td>
-                      {ss.signedDateTime ? moment(ss.signedDateTime).format(dateTime) : '-'}
-                    </td>
-                    <td>
-                      {ss.status}
-                    </td>
-                    <td>
-                      {ss.status === 'sent' ? <button onClick={() => toSign({...ss, envelopeId: item.envelopeId})}>去签约</button> : <>-</>}
-                    </td>
-                  </tr>
-                )}
-                </tbody>
-                </table>
-            </div>
-          </li>) : null}
-        </ul>
+    <div className='sign-contanier'>
+      <div className='signList'>
+        <h2 className='success'>签约成功</h2>
+        <div className='list'>
+          <div className='listtitle'>已签约列表</div>
+          <ul className='enveloplist'>
+          {signList && signList.length ? signList.map(item =>
+            <li className='item' key={item.envelopeId}>
+              <div className='title'>
+                <span className='label'>
+                  合同名称:<span className='text'>{item.emailSubject}</span>
+                </span>
+                <span className='label'>
+                  发送人:<span className='text'>{item.sender.userName}</span>
+                </span>
+                <button className='btn' onClick={() => toView(item.envelopeId)}>查看合同</button>
+                {item.status === "completed" ? 
+                  <button className='btn' onClick={() => toDownload(item)}>下载合同</button> : null}
+              </div>
+              <div className='signers'>
+                <div className='person'>签约人列表:</div>
+                <table className='signer-table'>
+                  <thead>
+                    <tr className='tr'>
+                      <th style={{width: '20%'}}>姓名</th>
+                      <th style={{width: '20%'}}>email</th>
+                      <th style={{width: '20%'}}>签约时间</th>
+                      <th style={{width: '20%'}}>签约状态</th>
+                      <th style={{width: '20%'}}>操作</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  {item.recipients.signers.map(ss => 
+                    <tr key={ss.recipientId} className='tr'>
+                      <td>
+                        {ss.name}
+                      </td>
+                      <td>
+                        {ss.email}
+                      </td>
+                      <td>
+                        {ss.signedDateTime ? moment(ss.signedDateTime).format(dateTime) : '-'}
+                      </td>
+                      <td>
+                        {ss.status}
+                      </td>
+                      <td>
+                        {ss.status === 'sent' ? <button onClick={() => toSign({...ss, envelopeId: item.envelopeId})}>去签约</button> : <>-</>}
+                      </td>
+                    </tr>
+                  )}
+                  </tbody>
+                  </table>
+              </div>
+            </li>) : null}
+          </ul>
+        </div>
       </div>
+
+      <Modal visible={modalVisible} envelopeId={envelopeId} handleCancel={handleCancel} />
     </div>
   )
 }

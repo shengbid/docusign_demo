@@ -25,6 +25,8 @@ const Modal = (props) => {
 
   const onCancel = () => {
     handleCancel()
+    setFileList([])
+    setImgList([])
   }
 
   // 查看文件图片
@@ -61,7 +63,7 @@ const Modal = (props) => {
               <div className='file' key={item.documentId} onClick={() => viewImage(item)}>{item.name}</div>
             )}
             <div className='imgList'>
-              {imgList.length && imgList.map(item => 
+              {imgList.map(item => 
                 <div className='img' key={Math.random()}>
                   <img src={item} alt='' />
                 </div>

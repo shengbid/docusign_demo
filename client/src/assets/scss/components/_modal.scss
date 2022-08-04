@@ -10,6 +10,7 @@
     height: 600px;
     margin: 100px auto 0;
     background-color: #fff;
+    overflow-y: scroll;
     .modal-box {
       padding: 24px;
       .header {
@@ -32,7 +33,15 @@
           cursor: pointer;
         }
         .imgList {
-          
+          display: flex;
+          flex-wrap: wrap;
+          .img {
+            width: 165px;
+            margin-right: 10px;
+            img {
+              width: 100%;
+            }
+          }
         }
       }
     }
