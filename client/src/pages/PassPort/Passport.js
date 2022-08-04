@@ -11,17 +11,6 @@ function Passport({ text }) {
   const [templateId, setTemplateId] = useState('')
   const [envelopeId, setEnvelopId] = useState('')
 
-  useEffect(() => {
-    const id = localStorage.getItem('envelopeId')
-    const arr = localStorage.getItem('signers')
-    if (id) {
-      setEnvelopId(id)
-    }
-    if(arr) {
-      setSingers(JSON.parse(arr))
-    }
-  }, [])
-
   const getTemplate = async () => {
     try {
       const {data} = await axios('/template/getTemplates');
@@ -53,7 +42,6 @@ function Passport({ text }) {
         }
       })
       setSingers(arr)
-      localStorage.setItem('signers', JSON.stringify(arr))
       // console.log(data)
 
     } catch (error) {
@@ -89,7 +77,6 @@ function Passport({ text }) {
       const response = await sendRequest('/template/sendByTemplate', body);
       console.log(response.data);
       setEnvelopId(response.data)
-      localStorage.setItem('envelopeId', response.data)
       // Redirect to success screen
       // navigate('/success');
     } catch (error) {
