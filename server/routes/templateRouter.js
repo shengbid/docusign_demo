@@ -8,7 +8,8 @@ const {
   envelopsController,
   envelopDocumentsController,
   envelopPdfController,
-  envelopDocumentImagesController
+  envelopDocumentImagesController,
+  templateDocumentTabsController,
 } = require('../controllers/templateContraoller');
 
 
@@ -20,5 +21,6 @@ router.post('/getEnvelopes', envelopsController);
 router.post('/getEnvelopePdfs', envelopPdfController);
 router.post('/getEnvelopeDocuments', envelopDocumentsController);
 router.post('/getEnvelopeDocumentImages', envelopDocumentImagesController);
+router.post('/getTemplateDocumentTabs', templateDocumentTabsController);
 
 module.exports = router;

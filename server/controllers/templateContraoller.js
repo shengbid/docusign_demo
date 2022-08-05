@@ -12,7 +12,8 @@ const {
   getenvelops,
   getenvelopDocuments,
   getenvelopPdf,
-  getenvelopDocumentImages
+  getenvelopDocumentImages,
+  getTemplateDocumentTabs
 } = require('../docusign/templates')
 
 // Set constants
@@ -304,6 +305,34 @@ const envelopDocumentImagesController = async (req, res, next) => {
   }
 };
 
+// 根据文档ID获取文档tabs
+const templateDocumentTabsController = async (req, res, next) => {
+  await checkToken(req);
+  const {body} = req
+
+  // Create args
+  const args = {
+    accessToken: req.session.accessToken,
+    basePath: req.session.basePath,
+    accountId: req.session.accountId,
+    templateId: body.templateId,
+    documentId: body.documentId,
+  };
+  let results = null;
+
+  // Get the tab data
+  try {
+    results = await getTemplateDocumentTabs(args);
+  } catch (error) {
+    console.log('Error getting template data.');
+    next(error);
+  }
+
+  if (results) {
+    res.status(200).send(results);
+  }
+};
+
 
 module.exports = {
   templateController,
@@ -313,5 +342,6 @@ module.exports = {
   envelopsController,
   envelopDocumentsController,
   envelopPdfController,
-  envelopDocumentImagesController
+  envelopDocumentImagesController,
+  templateDocumentTabsController
 };

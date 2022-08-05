@@ -87,7 +87,6 @@ function Passport({ text }) {
   }
   // 生成签约视图
   const toSign = async (item) => {
-    
     // Make request body
     const body = {
       ...item,
@@ -106,6 +105,20 @@ function Passport({ text }) {
     }
   }
 
+  // 获取模板tabs
+  const getTabs = async () => {
+    const body = {
+      documentId: '1',
+      templateId,
+    };
+    try {
+      const {data} = await sendRequest('/template/getTemplateDocumentTabs', body);
+      console.log(data)
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   return (
     <section className="content-section">
       <div className="container">
@@ -119,16 +132,22 @@ function Passport({ text }) {
         </button>
         </div>
         <div className="template-holder">
+            <button
+              className="tab-button"
+              onClick={getTabs}
+            >
+              获取模板tabs
+            </button>
           <form>
             <div className="form-text-container">
               <label>Docusign模板列表</label>
             </div>
+
             <select onChange={changeTemplate}>
               {templateList.map(item => 
               <option key={item.templateId} value={item.templateId}>{item.name}</option>
               )}
             </select>
-
             <div className="form-text-container">
               <label>签约人列表</label>
             </div>
