@@ -24,7 +24,7 @@
    // await getTemplatDocument(args)
    // Step 1. Make the envelope request body
    let envelope = await makeEnvelope(args.envelopeArgs);
- 
+
    // Step 2. call Envelopes::create API method
    // Exceptions will be caught by the calling function
    let results = await envelopesApi.createEnvelope(args.accountId, {
@@ -71,7 +71,7 @@
             ]  
           }], 
         "idCheckConfigurationName":""
-      }
+      },
     }]
  
    const compTemplate = docusign.CompositeTemplate.constructFromObject({

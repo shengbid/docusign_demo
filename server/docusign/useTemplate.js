@@ -4,7 +4,7 @@
  * @author DocuSign
  */
 
-const docusign = require("docusign-esign");
+const docusign = require("docusign-esign/src/index.js");
 
 /**
  * This function does the work of creating the envelope
@@ -25,18 +25,78 @@ const sendEnvelopeFromTemplate = async (args) => {
   // Step 1. Make the envelope request body
   let envelope = await makeEnvelope(args.envelopeArgs);
 
-  // let prefillTabs = docusign.prefillTabs.constructFromObject({
-  //   'textTabs':[
-  //     { 
-  //       'pageNumber' : '1',
-  //       'documentId' : '1',
-  //       'value' : 'myValue', 
-  //     }
-  //   ]
-  // });
-  // let tabs = new docusign.Tabs();
-  // tabs.prefillTabs = prefillTabs;
-  // envelopesApi.createDocumentTabs(accountId, envelopeId, '1', tabs);
+  let prefillTabs = docusign.PrefillTabs.constructFromObject({
+    "textTabs":[
+        {
+            "concealValueOnDocument":"false",
+            "disableAutoSize":"false",
+            "documentId":"1",
+            "tabId":"9c86197b-5c31-421b-961e-222e02dd1bb5",
+            "tabLabel":"文本 22c7a25d-eb89-4aff-8fe3-9e95141ae6f1",
+            "tabType":"prefilltab",
+            "templateLocked":"false",
+            "templateRequired":"true",
+            "validationMessage":"",
+            "validationPattern":"",
+            "value":"初始值1",
+            "width":"84",
+            "xPosition":"152",
+            "yPosition":"194"
+        },
+        {
+            "concealValueOnDocument":"false",
+            "disableAutoSize":"false",
+            "documentId":"1",
+            "required":"true",
+            "shared":"false",
+            "tabId":"e6e1d24d-351a-479a-9fdc-9a270ba63abb",
+            "tabLabel":"文本 8e4ad6b8-fa3b-4704-96b0-f0900ca389bd",
+            "tabType":"prefilltab",
+            "templateLocked":"false",
+            "templateRequired":"true",
+            "validationMessage":"",
+            "validationPattern":"",
+            "value":"初始值2",
+            "width":"84",
+            "xPosition":"98",
+            "yPosition":"217"
+        },
+        {
+            "concealValueOnDocument":"false",
+            "disableAutoSize":"false",
+            "documentId":"1",
+            "shared":"false",
+            "tabId":"d577c669-8c08-4fe8-a866-3af069e9239f",
+            "tabLabel":"文本 79c2c75a-b4f5-4dd6-8940-ad9f3aa90007",
+            "tabType":"prefilltab",
+            "templateLocked":"false",
+            "templateRequired":"true",
+            "validationMessage":"",
+            "validationPattern":"",
+            "value":"初始值3",
+            "width":"84",
+            "xPosition":"170",
+            "yPosition":"242"
+          },
+          {
+            "documentId":"1",
+            requireAll: "false",
+            required: "true",
+            shared: "false",
+            tabId: "fc2b6d41-9399-4d69-95a1-4053ae0ead40",
+            tabLabel: "文本 04410fa5-74b3-4493-81d9-2761049f14cc",
+            tabType: "prefilltab",
+            templateLocked: "false",
+            templateRequired: "true",
+            underline: "false",
+            validationMessage: "",
+            validationPattern: "",
+            value: "初始值4",
+          }
+      ]
+  });
+  let tabs = new docusign.Tabs();
+  tabs.prefillTabs = prefillTabs;
 
   // Step 2. call Envelopes::create API method
   // Exceptions will be caught by the calling function
@@ -45,6 +105,9 @@ const sendEnvelopeFromTemplate = async (args) => {
   });
   let envelopeId = results.envelopeId;
   console.log(`Envelope was created. EnvelopeId ${envelopeId}`);
+
+  envelopesApi.createDocumentTabs(args.accountId, envelopeId, '1', tabs);
+
   return envelopeId;
 };
 
@@ -107,6 +170,7 @@ async function makeEnvelope(args) {
         recipients: {
           signers: signers,
         },
+
       }),
     ],
   });

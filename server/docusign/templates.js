@@ -106,6 +106,23 @@ const getenvelopDocumentImages = async (args) => {
 
   return Buffer.from(results).toString('base64');
 }
+// 根据文档ID获取文档tab
+const getTemplateDocumentTabs = async (args) => {
+  let eSignApi = new docusign.ApiClient();
+  eSignApi.setBasePath(args.basePath);
+  eSignApi.addDefaultHeader('Authorization', 'Bearer ' + args.accessToken);
+  let envelopesApi = new docusign.TemplatesApi(eSignApi)
+
+  const results = await envelopesApi.getDocumentTabs(
+    args.accountId, 
+    args.templateId,
+    args.documentId,
+  );
+
+  console.log(`documentTab get success`);
+
+  return results;
+}
 
 module.exports = {
   getTemplateList,
@@ -113,5 +130,6 @@ module.exports = {
   getenvelops,
   getenvelopDocuments,
   getenvelopPdf,
-  getenvelopDocumentImages
+  getenvelopDocumentImages,
+  getTemplateDocumentTabs
 };
