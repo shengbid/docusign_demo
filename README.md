@@ -11,6 +11,7 @@ DocuSign嵌入式签名示例
 
 前端: react   后端: node.js
 
+### 注意,本地启动访问会跨越,这里配置了跨域文件, 将client目录下的setupProxy.js文件中的域名改成你自己电脑的域名
 ## Running MyGovernment启动项目
 
 前后端分别启动
