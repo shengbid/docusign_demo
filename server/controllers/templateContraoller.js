@@ -92,7 +92,7 @@ const templateViewController = async (req, res, next) => {
     roleName: body.roleName,
 
     // Embedded signing arguments
-    signerClientId: body.signerClientId,
+    signerClientId: signerClientId,
     dsReturnUrl: dsReturnUrl,
     dsPingUrl: dsPingUrl,
 

@@ -5,6 +5,7 @@
  */
 
 const docusign = require("docusign-esign");
+const signerClientId = '1000';
 
 /**
  * This function does the work of creating the envelope
@@ -55,7 +56,7 @@ async function makeEnvelope(args) {
       name: item.name,
       roleName: item.roleName,
       recipientId: item.recipientId,
-      clientUserId: item.signerClientId,
+      clientUserId: signerClientId,
       emailNotification: {
         supportedLanguage: 'zh_CN'
       }

@@ -54,6 +54,7 @@ const sendEnvelope = async (envelopeDefinition, args) => {
  */
 const getRecipientViewUrl = async (envelopeId, args) => {
   // Create API client to call
+  console.log(444, args)
   let eSignApi = new eSignSdk.ApiClient();
   eSignApi.setBasePath(args.basePath);
   eSignApi.addDefaultHeader('Authorization', 'Bearer ' + args.accessToken);
@@ -63,6 +64,7 @@ const getRecipientViewUrl = async (envelopeId, args) => {
   const viewRequest = new eSignSdk.RecipientViewRequest.constructFromObject({
     authenticationMethod: 'none',
     clientUserId: args.envelopeArgs.signerClientId,
+    // clientUserId: '80f7e864-c2f7-4878-9f84-7eaacd6d8855',
     recipientId: '1',
     returnUrl: args.envelopeArgs.dsReturnUrl,
     userName: args.envelopeArgs.signerName,
