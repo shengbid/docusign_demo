@@ -10,10 +10,12 @@ const {
   envelopPdfController,
   envelopDocumentImagesController,
   templateDocumentTabsController,
+  templateEmailSendController
 } = require('../controllers/templateContraoller');
 
 
 router.post('/sendByTemplate', templateController);
+router.post('/sendEmailByTemplate', templateEmailSendController);
 router.post('/getViewByEnvelope', templateViewController);
 router.get('/getTemplates', templateListController);
 router.post('/getSigners', templateSignersController);

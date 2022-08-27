@@ -6,6 +6,9 @@ const { checkToken } = require('./jwtController');
 const {
   getRecipientViewUrl,
 } = require('../docusign/envelope');
+const {
+  sendEmailByEnvelopeId,
+} = require('../docusign/envelopByTemplate');
 const { 
   getTemplateList, 
   getTemplatSigners,
@@ -333,6 +336,37 @@ const templateDocumentTabsController = async (req, res, next) => {
   }
 };
 
+// 根据envelopeId发送信封邮件
+const templateEmailSendController = async (req, res, next) => {
+  await checkToken(req);
+  const {body} = req
+
+  // Create args
+  const args = {
+    accessToken: req.session.accessToken,
+    basePath: req.session.basePath,
+    accountId: req.session.accountId,
+    envelopeId: body.envelopeId,
+    signerEmail: body.email,
+    signerName: body.name,
+    roleName: body.roleName,
+    signerClientId: body.signerClientId,
+  };
+  let results = null;
+
+  // Get the tab data
+  try {
+    results = await sendEmailByEnvelopeId(args);
+  } catch (error) {
+    console.log('Error send envelope.');
+    next(error);
+  }
+
+  if (results) {
+    res.status(200).send(results);
+  }
+};
+
 
 module.exports = {
   templateController,
@@ -343,5 +377,6 @@ module.exports = {
   envelopDocumentsController,
   envelopPdfController,
   envelopDocumentImagesController,
-  templateDocumentTabsController
+  templateDocumentTabsController,
+  templateEmailSendController
 };

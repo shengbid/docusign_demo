@@ -76,6 +76,7 @@ function Passport({ text }) {
     try {
       const response = await sendRequest('/template/sendByTemplate', body);
       console.log(response.data);
+      setRequesting(false);
       setEnvelopId(response.data)
       // Redirect to success screen
       // navigate('/success');
@@ -95,6 +96,7 @@ function Passport({ text }) {
 
     try {
       const response = await sendRequest('/template/getViewByEnvelope', body);
+      // const response = await sendRequest('/template/sendEmailByTemplate', body);
       if (response.status === 200) {
         window.location = response.data;
       }
@@ -110,6 +112,7 @@ function Passport({ text }) {
     const body = {
       documentId: '1',
       templateId,
+      // envelopeId: '112308ca-d225-4016-9854-9a675925e30e',
     };
     try {
       const {data} = await sendRequest('/template/getTemplateDocumentTabs', body);

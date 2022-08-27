@@ -4,7 +4,7 @@
  * @author DocuSign
  */
 
-const docusign = require("docusign-esign/src/index.js");
+const docusign = require("docusign-esign");
 
 /**
  * This function does the work of creating the envelope
@@ -25,79 +25,6 @@ const sendEnvelopeFromTemplate = async (args) => {
   // Step 1. Make the envelope request body
   let envelope = await makeEnvelope(args.envelopeArgs);
 
-  let prefillTabs = docusign.PrefillTabs.constructFromObject({
-    "textTabs":[
-        {
-            "concealValueOnDocument":"false",
-            "disableAutoSize":"false",
-            "documentId":"1",
-            "tabId":"9c86197b-5c31-421b-961e-222e02dd1bb5",
-            "tabLabel":"文本 22c7a25d-eb89-4aff-8fe3-9e95141ae6f1",
-            "tabType":"prefilltab",
-            "templateLocked":"false",
-            "templateRequired":"true",
-            "validationMessage":"",
-            "validationPattern":"",
-            "value":"初始值1",
-            "width":"84",
-            "xPosition":"152",
-            "yPosition":"194"
-        },
-        {
-            "concealValueOnDocument":"false",
-            "disableAutoSize":"false",
-            "documentId":"1",
-            "required":"true",
-            "shared":"false",
-            "tabId":"e6e1d24d-351a-479a-9fdc-9a270ba63abb",
-            "tabLabel":"文本 8e4ad6b8-fa3b-4704-96b0-f0900ca389bd",
-            "tabType":"prefilltab",
-            "templateLocked":"false",
-            "templateRequired":"true",
-            "validationMessage":"",
-            "validationPattern":"",
-            "value":"初始值2",
-            "width":"84",
-            "xPosition":"98",
-            "yPosition":"217"
-        },
-        {
-            "concealValueOnDocument":"false",
-            "disableAutoSize":"false",
-            "documentId":"1",
-            "shared":"false",
-            "tabId":"d577c669-8c08-4fe8-a866-3af069e9239f",
-            "tabLabel":"文本 79c2c75a-b4f5-4dd6-8940-ad9f3aa90007",
-            "tabType":"prefilltab",
-            "templateLocked":"false",
-            "templateRequired":"true",
-            "validationMessage":"",
-            "validationPattern":"",
-            "value":"初始值3",
-            "width":"84",
-            "xPosition":"170",
-            "yPosition":"242"
-          },
-          {
-            "documentId":"1",
-            requireAll: "false",
-            required: "true",
-            shared: "false",
-            tabId: "fc2b6d41-9399-4d69-95a1-4053ae0ead40",
-            tabLabel: "文本 04410fa5-74b3-4493-81d9-2761049f14cc",
-            tabType: "prefilltab",
-            templateLocked: "false",
-            templateRequired: "true",
-            underline: "false",
-            validationMessage: "",
-            validationPattern: "",
-            value: "初始值4",
-          }
-      ]
-  });
-  let tabs = new docusign.Tabs();
-  tabs.prefillTabs = prefillTabs;
-
   // Step 2. call Envelopes::create API method
   // Exceptions will be caught by the calling function
   let results = await envelopesApi.createEnvelope(args.accountId, {
@@ -106,7 +33,7 @@ const sendEnvelopeFromTemplate = async (args) => {
   let envelopeId = results.envelopeId;
   console.log(`Envelope was created. EnvelopeId ${envelopeId}`);
 
-  envelopesApi.createDocumentTabs(args.accountId, envelopeId, '1', tabs);
+  // envelopesApi.createDocumentTabs(args.accountId, envelopeId, '1', tabs);
 
   return envelopeId;
 };
@@ -132,6 +59,50 @@ async function makeEnvelope(args) {
       emailNotification: {
         supportedLanguage: 'zh_CN'
       }
+    }
+    if (item.roleName === "partyA") {
+      newItem.tabs = {
+        textTabs: [
+          {
+            documentId: "1",
+            locked: true,
+            maxLength: "4000",
+            originalValue: "",
+            pageNumber: "1",
+            recipientId: "d749512b-217d-46e6-b644-051286852b30",
+            requireAll: "false",
+            required: true,
+            shared: true,
+            tabId: "ba7d20bf-86b8-4fed-9711-cfaa2dfc7298",
+            tabLabel: "文本 7cf4671c-597f-4180-aa19-b382c0b5bd2e",
+            tabType: "text",
+            templateLocked: "false",
+            templateRequired: "false",
+            underline: "false",
+            value: "预填充字段1"
+          },
+          // {
+          //   documentId: "1",
+          //   locked: true,
+          //   maxLength: "4000",
+          //   originalValue: "",
+          //   pageNumber: "1",
+          //   recipientId: "d749512b-217d-46e6-b644-051286852b30",
+          //   requireAll: "false",
+          //   required: true,
+          //   shared: true,
+          //   tabId: "ef13a215-1723-4f20-95e9-f7ec99e781ce",
+          //   tabLabel: "文本 87af5e7c-abc0-4b70-8db3-54a0b9336efc",
+          //   tabType: "text",
+          //   templateLocked: "false",
+          //   templateRequired: "false",
+          //   underline: "false",
+          //   value: "预填充字段2"
+          // }
+        ]
+      }
+    } else {
+      // newItem.clientUserId = item.signerClientId
     }
     if (item.identityVerification) { // 如果有短信验证
       newItem.identityVerification = {
@@ -170,40 +141,39 @@ async function makeEnvelope(args) {
         recipients: {
           signers: signers,
         },
-
       }),
     ],
   });
 
   // Recipients object for the added document:
-  let recipientsAddedDoc = docusign.Recipients.constructFromObject({
-    signers: signers,
-  });
+  // let recipientsAddedDoc = docusign.Recipients.constructFromObject({
+  //   signers: signers,
+  // });
 
-  let doc1 = new docusign.Document(),
-    doc1b64 = Buffer.from(document1(args)).toString("base64");
-  doc1.documentBase64 = doc1b64;
-  doc1.name = "Appendix 1--Sales order"; // can be different from actual file name
-  doc1.fileExtension = "html";
-  doc1.documentId = "1";
+  // let doc1 = new docusign.Document(),
+  //   doc1b64 = Buffer.from(document1(args)).toString("base64");
+  // doc1.documentBase64 = doc1b64;
+  // doc1.name = "Appendix 1--Sales order"; // can be different from actual file name
+  // doc1.fileExtension = "html";
+  // doc1.documentId = "1";
 
-  // 增加附件, 如果要添加附件修改doc1
-  // create a composite template for the added document
-  let compTemplate2 = docusign.CompositeTemplate.constructFromObject({
-    compositeTemplateId: "2",
-    // Add the recipients via an inlineTemplate
-    inlineTemplates: [
-      docusign.InlineTemplate.constructFromObject({
-        sequence: "1",
-        recipients: recipientsAddedDoc,
-      }),
-    ],
-    document: doc1,
-  });
+  // // 增加附件, 如果要添加附件修改doc1
+  // // create a composite template for the added document
+  // let compTemplate2 = docusign.CompositeTemplate.constructFromObject({
+  //   compositeTemplateId: "2",
+  //   // Add the recipients via an inlineTemplate
+  //   inlineTemplates: [
+  //     docusign.InlineTemplate.constructFromObject({
+  //       sequence: "1",
+  //       recipients: recipientsAddedDoc,
+  //     }),
+  //   ],
+  //   document: doc1,
+  // });
 
   env.compositeTemplates = [compTemplate]
   env.status = "sent"; // We want the envelope to be sent
-
+  console.log(signers)
   return env;
 }
 
